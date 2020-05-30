@@ -119,7 +119,7 @@ function App() {
     }, [selectedVial, used, wastedAmount])
 
     return (
-        <div className="h-full flex items-center justify-center bg-gray-200">
+        <div className="h-screen flex items-center justify-center bg-gray-200">
             <div className="flex flex-col w-full md:w-8/12 max-w-xl">
                 <div className="flex flex-col items-stretch px-10 md:px-20">
                     <InputLabel>Used</InputLabel>

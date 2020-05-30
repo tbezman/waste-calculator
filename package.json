@@ -1,0 +1,21 @@
+{
+  "name": "waste-calculator",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "tailwind": "tailwindcss build src/index.css -o src/index.build.css",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@pika/react": "^16.13.1",
+    "@pika/react-dom": "^16.13.1",
+    "js-combinatorics": "^0.5.5",
+    "tailwindcss": "^1.4.6"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "vite": "^0.19.0",
+    "vite-plugin-react": "^2.0.0"
+  }
+}

@@ -74,14 +74,14 @@ function waste(
 
 const NumberInput: React.FC<JSX.IntrinsicElements['input']> = (props) => (
     <input
-        className=" text-blue-900 px-4 py-2 border border-blue-900 rounded bg-blue-100 leading-none"
+        className="px-4 py-2 leading-none text-blue-900 bg-blue-100 border border-blue-900 rounded "
         type="text"
         {...props}
     />
 )
 
 const InputLabel: React.FC = ({ children }) => (
-    <label className="leading-none mt-4 mb-1 text-sm text-blue-900">
+    <label className="mt-4 mb-1 text-sm leading-none text-blue-900">
         {children}
     </label>
 )
@@ -98,6 +98,7 @@ function App() {
     >()
 
     const [showingModal, setShowingModal] = React.useState(false)
+    const [onlyPatient, setOnlyPatient] = React.useState(false)
 
     const vialCountMap = React.useMemo(() => {
         const initialValue: { [vial: number]: number } = {}
@@ -113,14 +114,14 @@ function App() {
     }, [bestConfig])
 
     const calculate = React.useCallback(() => {
-        setBestConfig(waste(selectedVial, used, wastedAmount))
+        setBestConfig(waste(selectedVial, used, wastedAmount, onlyPatient))
 
         setShowingModal(true)
     }, [selectedVial, used, wastedAmount])
 
     return (
-        <div className="h-screen flex items-center justify-center bg-gray-200">
-            <div className="flex flex-col w-full md:w-8/12 max-w-xl">
+        <div className="flex items-center justify-center h-screen bg-gray-200">
+            <div className="flex flex-col w-full max-w-xl md:w-8/12">
                 <div className="flex flex-col items-stretch px-10 md:px-20">
                     <InputLabel>Used</InputLabel>
                     <NumberInput
@@ -145,16 +146,29 @@ function App() {
                                 )
                             )
                         }}
-                        className="text-blue-900 bg-blue-100 border border-blue-900 rounded px-4 py-2 leading-none appearance-none"
+                        className="px-4 py-2 leading-none text-blue-900 bg-blue-100 border border-blue-900 rounded appearance-none"
                     >
                         {initialVials.map((vial) => (
                             <option>{vial.drug}</option>
                         ))}
                     </select>
 
+                    <div className="flex items-center justify-between mt-4">
+                        <label className="mb-1 text-sm leading-none text-blue-900">
+                            Only Patient?
+                        </label>
+                        <input
+                            checked={onlyPatient}
+                            onChange={() =>
+                                setOnlyPatient((current) => !current)
+                            }
+                            type="checkbox"
+                        />
+                    </div>
+
                     <button
                         type="button"
-                        className="text-blue-100 bg-blue-900 mt-4 px-4 py-2 leading-none rounded"
+                        className="px-4 py-2 mt-4 leading-none text-blue-100 bg-blue-900 rounded"
                         onClick={calculate}
                     >
                         Calculate
@@ -162,18 +176,18 @@ function App() {
                 </div>
 
                 {showingModal && bestConfig && (
-                    <div className="fixed top-0 left-0 right-0 bottom-0 flex flex-col items-center justify-center">
-                        <div className="top-0 left-0 right-0 bottom-0 bg-black opacity-25 absolute"></div>
+                    <div className="fixed top-0 bottom-0 left-0 right-0 flex flex-col items-center justify-center">
+                        <div className="absolute top-0 bottom-0 left-0 right-0 bg-black opacity-25"></div>
 
-                        <div className="bg-white shadow-xl z-10 rounded px-8 py-5 slide-up flex flex-col w-full h-full md:w-6/12 md:h-auto">
+                        <div className="z-10 flex flex-col w-full h-full px-8 py-5 bg-white rounded shadow-xl slide-up md:w-6/12 md:h-auto">
                             <div className="flex items-center justify-between">
-                                <h1 className="text-blue-900 text-xl leading-none whitespace-no-wrap">
+                                <h1 className="text-xl leading-none text-blue-900 whitespace-no-wrap">
                                     Patient Report
                                 </h1>
 
                                 <button
                                     onClick={() => setShowingModal(false)}
-                                    className="bg-blue-200 rounded py-1 px-1"
+                                    className="px-1 py-1 bg-blue-200 rounded"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -195,7 +209,7 @@ function App() {
                                         <path d="M17 10.27V4.99a1 1 0 0 0-2 0V15a5 5 0 0 1-10 0v-1.08A6 6 0 0 1 0 8V2C0 .9.9 0 2 0h1a1 1 0 0 1 1 1 1 1 0 0 1-1 1H2v6a4 4 0 1 0 8 0V2H9a1 1 0 0 1-1-1 1 1 0 0 1 1-1h1a2 2 0 0 1 2 2v6a6 6 0 0 1-5 5.92V15a3 3 0 0 0 6 0V5a3 3 0 0 1 6 0v5.27a2 2 0 1 1-2 0z" />
                                     </svg>
 
-                                    <div className="text-blue-900 leading-none flex items-center justify-between">
+                                    <div className="flex items-center justify-between leading-none text-blue-900">
                                         Vial Config
                                     </div>
                                 </div>
@@ -212,8 +226,8 @@ function App() {
                                 {Object.keys(vialCountMap).map((size) => {
                                     return (
                                         <div className="flex items-end">
-                                            <span className="font-bold bg-blue-100 p-2 rounded leading-none">
-                                                <span className="text-blue-700 text-sm">
+                                            <span className="p-2 font-bold leading-none bg-blue-100 rounded">
+                                                <span className="text-sm text-blue-700">
                                                     {vialCountMap[size]}x
                                                 </span>
                                                 <span className="text-blue-900">
@@ -226,7 +240,7 @@ function App() {
                             </div>
 
                             <div className="flex">
-                                <div className="mt-2 bg-blue-100 p-2 text-blue-900 leading-none rounded font-bold">
+                                <div className="p-2 mt-2 font-bold leading-none text-blue-900 bg-blue-100 rounded">
                                     {bestConfig.config.join(', ')}
                                 </div>
                             </div>

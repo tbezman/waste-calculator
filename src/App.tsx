@@ -74,8 +74,9 @@ function waste(
 
 const NumberInput: React.FC<JSX.IntrinsicElements['input']> = (props) => (
     <input
-        className="px-4 py-2 leading-none text-blue-900 bg-blue-100 border border-blue-900 rounded "
-        type="text"
+        className="px-4 py-2 leading-none text-blue-900 bg-blue-100 border border-blue-900 rounded appearance-none "
+        type="number"
+        pattern="\d*"
         {...props}
     />
 )
@@ -154,7 +155,7 @@ function App() {
                     </select>
 
                     <div className="flex items-center justify-between mt-4">
-                        <label className="mb-1 text-sm leading-none text-blue-900">
+                        <label className="mb-1 text-sm font-bold leading-none text-blue-900">
                             Only Patient?
                         </label>
                         <input
@@ -168,7 +169,7 @@ function App() {
 
                     <button
                         type="button"
-                        className="px-4 py-2 mt-4 leading-none text-blue-100 bg-blue-900 rounded"
+                        className="px-4 py-2 mt-1 leading-none text-blue-100 bg-blue-900 rounded"
                         onClick={calculate}
                     >
                         Calculate

@@ -1,21 +1,29 @@
 import * as React from 'react'
+import * as $C from 'js-combinatorics'
 import { initialVials, Vial } from './vials'
 
-const sum = (list: number[]) => list.reduce((prev, next) => prev + next, 0)
+const sum = (list: VialCount[]) =>
+    list.reduce((prev, next) => prev + next.coefficient * next.size, 0)
+
+type VialCount = { size: number; coefficient: number }
 
 // Generate all array subsets:
-function* subsets(array, offset = 0) {
-    while (offset < array.length) {
-        let first = array[offset++]
-        for (let subset of subsets(array, offset)) {
-            subset.push(first)
-            yield subset
+function* subsets(sizes: Array<VialCount>): Generator<VialCount[], void, void> {
+    if (sizes.length === 0) {
+        yield []
+    } else {
+        const [size, ...rest] = sizes
+
+        for (let i = 0; i < size.coefficient + 1; i++) {
+            for (const subset of subsets(rest)) {
+                yield [{ size: size.size, coefficient: i }, ...subset]
+            }
         }
     }
-    yield []
 }
+
 type WasteConfig = {
-    config: number[]
+    config: VialCount[]
     total: number
     waste: number
 }
@@ -37,13 +45,11 @@ function waste(
 
     let best: WasteConfig | undefined
 
-    let allSizes = []
+    let allSizes: Array<VialCount> = []
     sizes.forEach((size) => {
         let worstCase = Math.ceil(used / size)
 
-        for (let i = 0; i < worstCase; i++) {
-            allSizes.push(size)
-        }
+        allSizes.push({ size, coefficient: worstCase })
     })
 
     const combinations = subsets(allSizes)
@@ -100,19 +106,6 @@ function App() {
 
     const [showingModal, setShowingModal] = React.useState(false)
     const [onlyPatient, setOnlyPatient] = React.useState(false)
-
-    const vialCountMap = React.useMemo(() => {
-        const initialValue: { [vial: number]: number } = {}
-        if (!bestConfig) {
-            return initialValue
-        }
-
-        return bestConfig.config.reduce((prev, next) => {
-            prev[next] = prev[next] ? prev[next] + 1 : 1
-
-            return prev
-        }, initialValue)
-    }, [bestConfig])
 
     const calculate = React.useCallback(() => {
         setBestConfig(waste(selectedVial, used, wastedAmount, onlyPatient))
@@ -224,26 +217,24 @@ function App() {
                             </div>
 
                             <div className="flex items-center space-x-2">
-                                {Object.keys(vialCountMap).map((size) => {
-                                    return (
-                                        <div className="flex items-end">
-                                            <span className="p-2 font-bold leading-none bg-blue-100 rounded">
-                                                <span className="text-sm text-blue-700">
-                                                    {vialCountMap[size]}x
-                                                </span>
-                                                <span className="text-blue-900">
-                                                    {size}
-                                                </span>
-                                            </span>
-                                        </div>
+                                {bestConfig.config
+                                    .filter(
+                                        ({ coefficient }) => coefficient !== 0
                                     )
-                                })}
-                            </div>
-
-                            <div className="flex">
-                                <div className="p-2 mt-2 font-bold leading-none text-blue-900 bg-blue-100 rounded">
-                                    {bestConfig.config.join(', ')}
-                                </div>
+                                    .map(({ size, coefficient }) => {
+                                        return (
+                                            <div className="flex items-end">
+                                                <span className="p-2 font-bold leading-none bg-blue-100 rounded">
+                                                    <span className="text-sm text-blue-700">
+                                                        {coefficient}x
+                                                    </span>
+                                                    <span className="text-blue-900">
+                                                        {size}
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        )
+                                    })}
                             </div>
                         </div>
                     </div>

@@ -274,4 +274,4 @@ export const initialVials: Vial[] = [
         unit: 'mg',
         ndc: '',
     },
-]
+].sort((a, b) => a.drug.toLowerCase().localeCompare(b.drug.toLowerCase()))

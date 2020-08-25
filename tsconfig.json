@@ -1,12 +1,13 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es3",
-    "noImplicitAny": false,
-    "outDir": "built",
-    "rootDir": ".",
-    "jsx": "react",
-    "sourceMap": false
-  },
-  "exclude": ["node_modules"]
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es3",
+        "noImplicitAny": false,
+        "outDir": "built",
+        "rootDir": ".",
+        "jsx": "react",
+        "sourceMap": false,
+        "downlevelIteration": true
+    },
+    "exclude": ["node_modules"]
 }

@@ -115,7 +115,7 @@ export const initialVials: Vial[] = [
     },
     {
         drug: 'Pembrolizumab',
-        vialSizes: '50',
+        vialSizes: '100',
         billableUnits: 1,
         unit: 'mg',
         ndc: '6302602',
@@ -210,13 +210,6 @@ export const initialVials: Vial[] = [
         billableUnits: 10,
         unit: 'mg',
         ndc: '',
-    },
-    {
-        drug: 'bortezomib',
-        vialSizes: '3.5',
-        billableUnits: 0.1,
-        unit: 'mg',
-        ndc: '63020004901',
     },
     {
         drug: 'vincristine',

@@ -37,11 +37,20 @@ function waste(
     const sizes = vial.vialSizes
         .toString()
         .split(',')
-        .map((it) => parseInt(it))
+        .map((it) => parseFloat(it))
         .sort()
     const [smallestVialSize] = sizes
-    const wastedAmount = parseFloat(wastedAmountString)
-    const used = parseFloat(usedString)
+
+    const wastedAmount = parseFloat(wastedAmountString || '0')
+    const used = parseFloat(usedString || '0')
+
+    if (wastedAmount === 0 && used === 0) {
+        return {
+            config: [{ coefficient: 1, size: smallestVialSize }],
+            total: smallestVialSize,
+            waste: smallestVialSize,
+        }
+    }
 
     let best: WasteConfig | undefined
 
@@ -107,15 +116,30 @@ function App() {
     const [showingModal, setShowingModal] = React.useState(false)
     const [onlyPatient, setOnlyPatient] = React.useState(false)
 
-    const calculate = React.useCallback(() => {
-        setBestConfig(waste(selectedVial, used, wastedAmount, onlyPatient))
+    const calculate = React.useCallback(
+        (e: React.FormEvent) => {
+            console.log('Calculating...')
+            e.preventDefault()
 
-        setShowingModal(true)
-    }, [selectedVial, used, wastedAmount])
+            setBestConfig(waste(selectedVial, used, wastedAmount, onlyPatient))
+
+            setShowingModal(true)
+        },
+        [selectedVial, used, wastedAmount]
+    )
+
+    const handleModalKeyDown = (event: React.KeyboardEvent) => {
+        if (event.keyCode === 27 || event.keyCode === 13) {
+            setShowingModal(false)
+        }
+    }
 
     return (
         <div className="flex items-center justify-center h-screen bg-gray-200">
-            <div className="flex flex-col w-full max-w-xl md:w-8/12">
+            <form
+                className="flex flex-col w-full max-w-xl md:w-8/12"
+                onSubmit={calculate}
+            >
                 <div className="flex flex-col items-stretch px-10 md:px-20">
                     <InputLabel>Used</InputLabel>
                     <NumberInput
@@ -161,9 +185,8 @@ function App() {
                     </div>
 
                     <button
-                        type="button"
+                        type="submit"
                         className="px-4 py-2 mt-1 leading-none text-blue-100 bg-blue-900 rounded"
-                        onClick={calculate}
                     >
                         Calculate
                     </button>
@@ -173,7 +196,16 @@ function App() {
                     <div className="fixed top-0 bottom-0 left-0 right-0 flex flex-col items-center justify-center">
                         <div className="absolute top-0 bottom-0 left-0 right-0 bg-black opacity-25"></div>
 
-                        <div className="z-10 flex flex-col w-full h-full px-8 py-5 bg-white rounded shadow-xl slide-up md:w-6/12 md:h-auto">
+                        <div
+                            tabIndex={0}
+                            onKeyDown={handleModalKeyDown}
+                            ref={(el) => {
+                                if (el) {
+                                    el.focus()
+                                }
+                            }}
+                            className="z-10 flex flex-col w-full h-full px-8 py-5 bg-white rounded shadow-xl slide-up md:w-6/12 md:h-auto"
+                        >
                             <div className="flex items-center justify-between">
                                 <h1 className="text-xl leading-none text-blue-900 whitespace-no-wrap">
                                     Patient Report
@@ -239,7 +271,7 @@ function App() {
                         </div>
                     </div>
                 )}
-            </div>
+            </form>
         </div>
     )
 }

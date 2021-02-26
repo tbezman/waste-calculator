@@ -267,4 +267,18 @@ export const initialVials: Vial[] = [
         unit: 'mg',
         ndc: '',
     },
+    {
+        drug: 'Atezolizumab',
+        vialSizes: '840,1200',
+        billableUnits: 10,
+        unit: 'mg',
+        ndc: '',
+    },
+    {
+        drug: 'Enfortumab Vedotin',
+        vialSizes: '20,30',
+        billableUnits: .25,
+        unit: 'mg',
+        ndc: '',
+    },
 ].sort((a, b) => a.drug.toLowerCase().localeCompare(b.drug.toLowerCase()))

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as $C from 'js-combinatorics'
 import { initialVials, Vial } from './vials'
 
 const sum = (list: VialCount[]) =>
@@ -204,7 +203,7 @@ function App() {
                                     el.focus()
                                 }
                             }}
-                            className="z-10 flex flex-col w-full h-full px-8 py-5 bg-white rounded shadow-xl slide-up md:w-6/12 md:h-auto"
+                            className="z-10 flex flex-col w-full h-full px-8 py-5 bg-white rounded shadow-xl slide-up md:w-6/12 md:h-auto max-w-2xl"
                         >
                             <div className="flex items-center justify-between">
                                 <h1 className="text-xl leading-none text-blue-900 whitespace-no-wrap">

@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { initialVials, Vial } from './vials'
+import { useEffect, useRef } from 'react'
 
-const sum = (list: VialCount[]) =>
-  list.reduce((prev, next) => prev + next.coefficient * next.size, 0)
+const sum = (list: VialCount[]) => list.reduce((prev, next) => prev + next.coefficient * next.size, 0)
 
 type VialCount = { size: number; coefficient: number }
 
@@ -31,7 +31,7 @@ function waste(
   vial: Vial,
   usedString: string,
   wastedAmountString: string,
-  onlyPatient: boolean = false
+  onlyPatient = false
 ): WasteConfig | undefined {
   const sizes = vial.vialSizes
     .toString()
@@ -53,9 +53,9 @@ function waste(
 
   let best: WasteConfig | undefined
 
-  let allSizes: Array<VialCount> = []
+  const allSizes: Array<VialCount> = []
   sizes.forEach((size) => {
-    let worstCase = Math.ceil(used / size)
+    const worstCase = Math.ceil(used / size)
 
     allSizes.push({ size, coefficient: worstCase })
   })
@@ -86,27 +86,24 @@ function waste(
   return best
 }
 
-const NumberInput: React.FC<JSX.IntrinsicElements['input']> = (props) => (
+const NumberInput = React.forwardRef<HTMLInputElement, JSX.IntrinsicElements['input']>((props, ref) => (
   <input
+    ref={ref}
     className="px-4 py-2 leading-none text-blue-900 bg-blue-100 border border-blue-900 rounded appearance-none "
     type="number"
     pattern="\d*"
     {...props}
   />
-)
+))
 
 const InputLabel: React.FC = ({ children }) => (
-  <label className="mt-4 mb-1 text-sm leading-none text-blue-900">
-    {children}
-  </label>
+  <label className="mt-4 mb-1 text-sm leading-none text-blue-900">{children}</label>
 )
 
 function App() {
-  const [used, setUsed] = React.useState<string | undefined>()
-  const [wastedAmount, setWastedAmount] = React.useState<string | undefined>()
-  const [selectedVial, setSelectedVial] = React.useState<Vial | undefined>(
-    initialVials[0]
-  )
+  const [used, setUsed] = React.useState<string>('')
+  const [wastedAmount, setWastedAmount] = React.useState<string>('')
+  const [selectedVial, setSelectedVial] = React.useState<Vial | undefined>(initialVials[0])
 
   const [bestConfig, setBestConfig] = React.useState<undefined | WasteConfig>()
 
@@ -123,65 +120,57 @@ function App() {
         setShowingModal(true)
       }
     },
-    [selectedVial, used, wastedAmount]
+    [onlyPatient, selectedVial, used, wastedAmount]
   )
 
   const handleModalKeyDown = (event: React.KeyboardEvent) => {
-    if (event.keyCode === 27 || event.keyCode === 13) {
+    if (event.key === 'Escape' || event.key === 'Enter') {
       setShowingModal(false)
     }
   }
 
+  const firstInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (!showingModal) {
+      firstInputRef.current?.focus()
+    }
+  }, [showingModal])
+
   return (
     <div className="flex items-center justify-center h-screen bg-gray-200">
-      <form
-        className="flex flex-col w-full max-w-xl md:w-8/12"
-        onSubmit={calculate}
-      >
+      <form className="flex flex-col w-full max-w-xl md:w-8/12" onSubmit={calculate}>
         <div className="flex flex-col items-stretch px-10 md:px-20">
           <InputLabel>Used</InputLabel>
+
           <NumberInput
+            ref={firstInputRef}
             value={used}
             placeholder="Used..."
             onChange={(e) => setUsed(e.target.value)}
           />
           <InputLabel>Wasted</InputLabel>
-          <NumberInput
-            value={wastedAmount}
-            placeholder="Wasted..."
-            onChange={(e) => setWastedAmount(e.target.value)}
-          />
+          <NumberInput value={wastedAmount} placeholder="Wasted..." onChange={(e) => setWastedAmount(e.target.value)} />
 
           <InputLabel>Drug</InputLabel>
           <select
             value={selectedVial?.drug}
             onChange={(e) => {
-              setSelectedVial(
-                initialVials.find((vial) => vial.drug === e.target.value)
-              )
+              setSelectedVial(initialVials.find((vial) => vial.drug === e.target.value))
             }}
             className="px-4 py-2 leading-none text-blue-900 bg-blue-100 border border-blue-900 rounded appearance-none"
           >
             {initialVials.map((vial) => (
-              <option>{vial.drug}</option>
+              <option key={vial.drug}>{vial.drug}</option>
             ))}
           </select>
 
           <div className="flex items-center justify-between mt-4">
-            <label className="mb-1 text-sm font-bold leading-none text-blue-900">
-              Only Patient?
-            </label>
-            <input
-              checked={onlyPatient}
-              onChange={() => setOnlyPatient((current) => !current)}
-              type="checkbox"
-            />
+            <label className="mb-1 text-sm font-bold leading-none text-blue-900">Only Patient?</label>
+            <input checked={onlyPatient} onChange={() => setOnlyPatient((current) => !current)} type="checkbox" />
           </div>
 
-          <button
-            type="submit"
-            className="px-4 py-2 mt-1 leading-none text-blue-100 bg-blue-900 rounded"
-          >
+          <button type="submit" className="px-4 py-2 mt-1 leading-none text-blue-100 bg-blue-900 rounded">
             Calculate
           </button>
         </div>
@@ -201,14 +190,9 @@ function App() {
               className="z-10 flex flex-col w-full h-full px-8 py-5 bg-white rounded shadow-xl slide-up md:w-6/12 md:h-auto max-w-2xl"
             >
               <div className="flex items-center justify-between">
-                <h1 className="text-xl leading-none text-blue-900 whitespace-no-wrap">
-                  Patient Report
-                </h1>
+                <h1 className="text-xl leading-none text-blue-900 whitespace-no-wrap">Patient Report</h1>
 
-                <button
-                  onClick={() => setShowingModal(false)}
-                  className="px-1 py-1 bg-blue-200 rounded"
-                >
+                <button onClick={() => setShowingModal(false)} className="px-1 py-1 bg-blue-200 rounded">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
@@ -229,9 +213,7 @@ function App() {
                     <path d="M17 10.27V4.99a1 1 0 0 0-2 0V15a5 5 0 0 1-10 0v-1.08A6 6 0 0 1 0 8V2C0 .9.9 0 2 0h1a1 1 0 0 1 1 1 1 1 0 0 1-1 1H2v6a4 4 0 1 0 8 0V2H9a1 1 0 0 1-1-1 1 1 0 0 1 1-1h1a2 2 0 0 1 2 2v6a6 6 0 0 1-5 5.92V15a3 3 0 0 0 6 0V5a3 3 0 0 1 6 0v5.27a2 2 0 1 1-2 0z" />
                   </svg>
 
-                  <div className="flex items-center justify-between leading-none text-blue-900">
-                    Vial Config
-                  </div>
+                  <div className="flex items-center justify-between leading-none text-blue-900">Vial Config</div>
                 </div>
 
                 <div className="text-blue-900">
@@ -242,13 +224,11 @@ function App() {
               <div className="flex items-center space-x-2">
                 {bestConfig.config
                   .filter(({ coefficient }) => coefficient !== 0)
-                  .map(({ size, coefficient }) => {
+                  .map(({ size, coefficient }, index) => {
                     return (
-                      <div className="flex items-end">
+                      <div className="flex items-end" key={index}>
                         <span className="p-2 font-bold leading-none bg-blue-100 rounded">
-                          <span className="text-sm text-blue-700">
-                            {coefficient}x
-                          </span>
+                          <span className="text-sm text-blue-700">{coefficient}x</span>
                           <span className="text-blue-900">{size}</span>
                         </span>
                       </div>

@@ -206,4 +206,9 @@ export const initialVials: Vial[] = [
     vialSizes: '350,500',
     unit: 'mg',
   },
+  {
+    drug: 'Gadobutrol',
+    vialSizes: '2,7.5',
+    unit: 'ml',
+  },
 ].sort((a, b) => a.drug.toLowerCase().localeCompare(b.drug.toLowerCase()))

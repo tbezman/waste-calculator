@@ -7,7 +7,7 @@ import { WasteResultModal } from './WasteResultModal'
 const NumberInput = React.forwardRef<HTMLInputElement, JSX.IntrinsicElements['input']>((props, ref) => (
   <input
     ref={ref}
-    className="px-3 py-4 leading-none text-blue-900 bg-blue-100 border border-blue-900 rounded appearance-none "
+    className="px-3 py-4 leading-none text-blue-900 bg-blue-50 border border-blue-900 rounded appearance-none "
     type="number"
     pattern="\d*"
     {...props}
@@ -54,9 +54,9 @@ export const WasteForm: FC = () => {
       <div className="flex flex-col items-stretch">
         <InputLabel>Used</InputLabel>
 
-        <NumberInput ref={firstInputRef} value={used} placeholder="Used..." onChange={(e) => setUsed(e.target.value)} />
+        <NumberInput ref={firstInputRef} value={used} placeholder="eg. 50" onChange={(e) => setUsed(e.target.value)} />
         <InputLabel>Wasted</InputLabel>
-        <NumberInput value={wastedAmount} placeholder="Wasted..." onChange={(e) => setWastedAmount(e.target.value)} />
+        <NumberInput value={wastedAmount} placeholder="eg. 100" onChange={(e) => setWastedAmount(e.target.value)} />
 
         <InputLabel>Drug</InputLabel>
         <select
@@ -64,7 +64,7 @@ export const WasteForm: FC = () => {
           onChange={(e) => {
             setSelectedVial(initialVials.find((vial) => vial.drug === e.target.value))
           }}
-          className="px-3 py-4 leading-none text-blue-900 bg-blue-100 border border-blue-900 rounded appearance-none"
+          className="px-3 py-4 leading-none text-blue-900 bg-blue-50 border border-blue-900 rounded appearance-none"
         >
           {initialVials.map((vial) => (
             <option key={vial.drug}>{vial.drug}</option>

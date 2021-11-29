@@ -53,7 +53,7 @@ export const WasteResultModal: FC<{ onClose: () => void; config: WasteConfig }> 
             .map(({ size, coefficient }, index) => {
               return (
                 <div className="flex items-end" key={index}>
-                  <span className="p-2 font-bold leading-none bg-blue-100 rounded">
+                  <span className="p-2 font-bold leading-none bg-blue-50 rounded">
                     <span className="text-sm text-blue-700">{coefficient}x</span>
                     <span className="text-blue-900">{size}</span>
                   </span>

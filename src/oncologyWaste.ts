@@ -1,5 +1,5 @@
 // Generate all array subsets:
-import { Vial } from './vials'
+import { OncologyVial, Vial } from './vials'
 type VialCount = { size: number; coefficient: number }
 
 const sum = (list: VialCount[]) => list.reduce((prev, next) => prev + next.coefficient * next.size, 0)
@@ -24,17 +24,13 @@ export type WasteConfig = {
   waste: number
 }
 
-export function waste(
-  vial: Vial,
+export function oncologyWaste(
+  vial: OncologyVial,
   usedString: string,
   wastedAmountString: string,
   onlyPatient = false
 ): WasteConfig | undefined {
-  const sizes = vial.vialSizes
-    .toString()
-    .split(',')
-    .map((it) => parseFloat(it))
-    .sort()
+  const sizes = vial.vialSizes.sort()
   const [smallestVialSize] = sizes
 
   const wastedAmount = parseFloat(wastedAmountString || '0')

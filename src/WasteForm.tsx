@@ -1,27 +1,17 @@
 import { FC, useEffect, useRef } from 'react'
-import { initialVials, Vial } from './vials'
+import { Vial, VialTypes } from './vials'
 import * as React from 'react'
-import { waste, WasteConfig } from './waste'
+import { oncologyWaste, WasteConfig } from './oncologyWaste'
 import { WasteResultModal } from './WasteResultModal'
+import { InputLabel, NumberInput } from './Input'
+import { useVials } from './VialsProvider'
 
-const NumberInput = React.forwardRef<HTMLInputElement, JSX.IntrinsicElements['input']>((props, ref) => (
-  <input
-    ref={ref}
-    className="px-3 py-4 leading-none text-blue-900 bg-blue-50 border border-blue-900 rounded appearance-none "
-    type="number"
-    pattern="\d*"
-    {...props}
-  />
-))
+export const WasteForm: FC<{ profile: keyof VialTypes }> = ({ profile }) => {
+  const [vials] = useVials(profile)
 
-const InputLabel: React.FC = ({ children }) => (
-  <label className="mt-8 mb-2 text-sm leading-none text-blue-900">{children}</label>
-)
-
-export const WasteForm: FC = () => {
   const [used, setUsed] = React.useState<string>('')
   const [wastedAmount, setWastedAmount] = React.useState<string>('')
-  const [selectedVial, setSelectedVial] = React.useState<Vial | undefined>(initialVials[0])
+  const [selectedVial, setSelectedVial] = React.useState<Vial | undefined>(vials[0])
 
   const [bestConfig, setBestConfig] = React.useState<undefined | WasteConfig>()
 
@@ -33,7 +23,7 @@ export const WasteForm: FC = () => {
       e.preventDefault()
 
       if (selectedVial && used && wastedAmount) {
-        setBestConfig(waste(selectedVial, used, wastedAmount, onlyPatient))
+        setBestConfig(oncologyWaste(selectedVial, used, wastedAmount, onlyPatient))
 
         setShowingModal(true)
       }
@@ -62,11 +52,11 @@ export const WasteForm: FC = () => {
         <select
           value={selectedVial?.drug}
           onChange={(e) => {
-            setSelectedVial(initialVials.find((vial) => vial.drug === e.target.value))
+            setSelectedVial(vials.find((vial) => vial.drug === e.target.value))
           }}
-          className="px-3 py-4 leading-none text-blue-900 bg-blue-50 border border-blue-900 rounded appearance-none"
+          className="px-3 py-4 leading-none text-blue-900 bg-blue-50 border border-gray-500 rounded appearance-none"
         >
-          {initialVials.map((vial) => (
+          {vials.map((vial) => (
             <option key={vial.drug}>{vial.drug}</option>
           ))}
         </select>

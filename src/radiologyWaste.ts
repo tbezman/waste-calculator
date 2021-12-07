@@ -1,5 +1,5 @@
 // Generate all array subsets:
-import { OncologyVial } from './vials'
+import { RadiologyVial } from './vials'
 
 type VialCount = { size: number; coefficient: number }
 
@@ -19,18 +19,18 @@ function* subsets(sizes: Array<VialCount>): Generator<VialCount[], void, void> {
   }
 }
 
-export type OncologyWasteConfig = {
+export type RadiologyWasteConfig = {
   config: VialCount[]
   total: number
   waste: number
 }
 
-export function oncologyWaste(
-  vial: OncologyVial,
+export function radiologyWaste(
+  vial: RadiologyVial,
   usedString: string,
   wastedAmountString: string,
   onlyPatient = false
-): OncologyWasteConfig | undefined {
+): RadiologyWasteConfig | undefined {
   const sizes = vial.vialSizes.sort()
   const [smallestVialSize] = sizes
 
@@ -38,14 +38,10 @@ export function oncologyWaste(
   const used = parseFloat(usedString || '0')
 
   if (wastedAmount === 0 && used === 0) {
-    return {
-      config: [{ coefficient: 1, size: smallestVialSize }],
-      total: smallestVialSize,
-      waste: smallestVialSize,
-    }
+    return undefined
   }
 
-  let best: OncologyWasteConfig | undefined
+  let best: RadiologyWasteConfig | undefined
 
   const allSizes: Array<VialCount> = []
   sizes.forEach((size) => {

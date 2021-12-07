@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef } from 'react'
 import { Vial, VialTypes } from './vials'
 import * as React from 'react'
-import { oncologyWaste, WasteConfig } from './oncologyWaste'
+import { oncologyWaste, OncologyWasteConfig } from './oncologyWaste'
 import { WasteResultModal } from './WasteResultModal'
 import { InputLabel, NumberInput } from './Input'
 import { useVials } from './VialsProvider'
@@ -13,7 +13,7 @@ export const WasteForm: FC<{ profile: keyof VialTypes }> = ({ profile }) => {
   const [wastedAmount, setWastedAmount] = React.useState<string>('')
   const [selectedVial, setSelectedVial] = React.useState<Vial | undefined>(vials[0])
 
-  const [bestConfig, setBestConfig] = React.useState<undefined | WasteConfig>()
+  const [bestConfig, setBestConfig] = React.useState<undefined | OncologyWasteConfig>()
 
   const [showingModal, setShowingModal] = React.useState(false)
   const [onlyPatient, setOnlyPatient] = React.useState(false)

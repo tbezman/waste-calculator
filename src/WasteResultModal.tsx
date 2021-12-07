@@ -1,9 +1,9 @@
 import { FC } from 'react'
 import * as React from 'react'
-import { WasteConfig } from './oncologyWaste'
+import { OncologyWasteConfig } from './oncologyWaste'
 import { Modal } from './Modal'
 
-export const WasteResultModal: FC<{ onClose: () => void; config: WasteConfig }> = ({ onClose, config }) => {
+export const WasteResultModal: FC<{ onClose: () => void; config: OncologyWasteConfig }> = ({ onClose, config }) => {
   return (
     <Modal onClose={onClose}>
       <div className="flex items-center justify-between">

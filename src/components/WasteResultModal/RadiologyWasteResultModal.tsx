@@ -1,9 +1,11 @@
 import { FC } from 'react'
-import * as React from 'react'
-import { OncologyWasteConfig } from './oncologyWaste'
-import { Modal } from './Modal'
+import { Modal } from '../Modal'
+import { RadiologyWasteConfig } from '../../utils/radiologyWaste'
 
-export const WasteResultModal: FC<{ onClose: () => void; config: OncologyWasteConfig }> = ({ onClose, config }) => {
+export const RadiologyWasteResultModal: FC<{ onClose: () => void; config: RadiologyWasteConfig }> = ({
+  onClose,
+  config,
+}) => {
   return (
     <Modal onClose={onClose}>
       <div className="flex items-center justify-between">
@@ -27,8 +29,18 @@ export const WasteResultModal: FC<{ onClose: () => void; config: OncologyWasteCo
           <div className="flex items-center justify-between leading-none text-blue-900">Vial Config</div>
         </div>
 
-        <div className="text-blue-900">
-          Wasted: <span className="font-bold">{config.waste}</span>
+        <div className="flex space-x-4 text-blue-900">
+          <div>
+            Price: <strong>${config.totalPrice}</strong>
+          </div>
+          <span>|</span>
+          <div>
+            Wasted:{' '}
+            <strong>
+              {config.wastedUnits}
+              {config.vial.unit}
+            </strong>
+          </div>
         </div>
       </div>
 
@@ -40,7 +52,10 @@ export const WasteResultModal: FC<{ onClose: () => void; config: OncologyWasteCo
               <div className="flex items-end" key={index}>
                 <span className="p-2 font-bold leading-none bg-blue-50 rounded">
                   <span className="text-sm text-blue-700">{coefficient}x</span>
-                  <span className="text-blue-900">{size}</span>
+                  <span className="text-blue-900">
+                    {size.size}
+                    {config.vial.unit}
+                  </span>
                 </span>
               </div>
             )

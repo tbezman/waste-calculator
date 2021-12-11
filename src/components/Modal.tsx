@@ -18,7 +18,7 @@ export const Modal: FC<{ onClose: () => void }> = ({ children, onClose }) => {
       <div
         tabIndex={0}
         onKeyDown={handleModalKeyDown}
-        className="z-10 flex flex-col w-full h-full px-8 py-12 bg-white rounded shadow-xl slide-up md:w-6/12 md:h-auto max-w-2xl max-h-[95vh] overflow-y-scroll"
+        className="z-10 flex flex-col w-full h-full px-8 py-12 bg-white rounded shadow-xl slide-up md:h-auto max-w-2xl max-h-[95vh] overflow-y-scroll"
       >
         {children}
       </div>

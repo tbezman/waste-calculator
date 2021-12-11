@@ -1,17 +1,17 @@
-import { FC, useEffect, useRef } from 'react'
-import { Vial, VialTypes } from './vials'
 import * as React from 'react'
-import { oncologyWaste, OncologyWasteConfig } from './oncologyWaste'
-import { WasteResultModal } from './WasteResultModal'
-import { InputLabel, NumberInput } from './Input'
-import { useVials } from './VialsProvider'
+import { FC, useEffect, useRef } from 'react'
+import { OncologyVial } from '../../vials'
+import { oncologyWaste, OncologyWasteConfig } from '../../utils/oncologyWaste'
+import { InputLabel, NumberInput } from '../Input'
+import { useVials } from '../VialsProvider'
+import { OncologyWasteResultModal } from '../WasteResultModal/OncologyWasteResultModal'
 
-export const WasteForm: FC<{ profile: keyof VialTypes }> = ({ profile }) => {
-  const [vials] = useVials(profile)
+export const OncologyWasteForm: FC = () => {
+  const [vials] = useVials('oncology')
 
   const [used, setUsed] = React.useState<string>('')
   const [wastedAmount, setWastedAmount] = React.useState<string>('')
-  const [selectedVial, setSelectedVial] = React.useState<Vial | undefined>(vials[0])
+  const [selectedVial, setSelectedVial] = React.useState<OncologyVial | undefined>(vials[0])
 
   const [bestConfig, setBestConfig] = React.useState<undefined | OncologyWasteConfig>()
 
@@ -78,7 +78,9 @@ export const WasteForm: FC<{ profile: keyof VialTypes }> = ({ profile }) => {
         </button>
       </div>
 
-      {showingModal && bestConfig && <WasteResultModal onClose={() => setShowingModal(false)} config={bestConfig} />}
+      {showingModal && bestConfig && (
+        <OncologyWasteResultModal onClose={() => setShowingModal(false)} config={bestConfig} />
+      )}
     </form>
   )
 }

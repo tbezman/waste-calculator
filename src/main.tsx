@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import './fonts/stylesheet.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Home } from './Home'
-import { Edit } from './Edit'
-import { VialsProvider } from './VialsProvider'
+import { Home } from './pages/Home'
+import { Edit } from './pages/Edit'
+import { VialsProvider } from './components/VialsProvider'
 
 ReactDOM.render(
   <React.StrictMode>

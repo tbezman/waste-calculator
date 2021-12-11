@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { useParams } from 'react-router-dom'
-import { ProfileCard, profiles } from './ProfileCard'
+import { Link, useParams } from 'react-router-dom'
+import { ProfileCard, profiles } from '../components/ProfileCard'
 import { FC, useCallback, useState } from 'react'
-import { OncologyVial, RadiologyVial, Vial } from './vials'
-import { RadiologyVialFormModal } from './RadiologyVialFormModal'
-import { useVials } from './VialsProvider'
-import { OncologyVialFormModal } from './OncologyVialFormModal'
+import { OncologyVial, RadiologyVial, Vial } from '../vials'
+import { RadiologyVialFormModal } from '../components/VialFormModal/RadiologyVialFormModal'
+import { useVials } from '../components/VialsProvider'
+import { OncologyVialFormModal } from '../components/VialFormModal/OncologyVialFormModal'
 
 const RadiologyVialCard: FC<{ vial: RadiologyVial }> = ({ vial }) => {
   const [, setVials] = useVials(vial.type)
@@ -209,14 +209,26 @@ export function Edit() {
 
   return (
     <>
-      <div className="flex flex-col min-h-screen p-8 space-y-16 text-blue-900">
-        <div className="flex space-x-4">
+      <div className="flex flex-col min-h-screen p-8 space-y-16 text-blue-900 max-w-screen-2xl m-auto">
+        <div className="flex space-x-8 items-center text-blue-900">
+          <Link className="flex items-center space-x-2" to={`/?profile=${params.profile}`}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span>Back</span>
+          </Link>
           <ProfileCard title={matchingProfile.title} value={matchingProfile.value} selected />
         </div>
 
-        <div className="space-y-4">
-          <div className="flex items-end justify-between">
-            <h1 className="text-blue-900 text-3xl">Vials</h1>
+        <div className="space-y-6">
+          <div className="flex items-end justify-between border-b border-gray-300 pb-2">
+            <h1 className="text-blue-900 text-3xl leading-none">Vials</h1>
             <button
               onClick={() => setShowingNewVialModal(true)}
               type="submit"
@@ -240,7 +252,17 @@ export function Edit() {
             </button>
           </div>
 
-          <div className="grid grid-cols-4 gap-x-6 gap-y-10">
+          {vials.length === 0 && (
+            <>
+              <div className="flex justify-center pt-12">
+                <div className="text-blue-900 text-2xl max-w-lg text-center">
+                  Uh oh, looks like you haven&apos;t added a vial yet. Click above to create one.
+                </div>
+              </div>
+            </>
+          )}
+
+          <div className="grid grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-10">
             {vials.map((vial) => {
               if (vial.type === 'radiology') {
                 return <RadiologyVialCard key={vial.drug} vial={vial} />

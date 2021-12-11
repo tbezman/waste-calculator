@@ -1,5 +1,5 @@
 // Generate all array subsets:
-import { OncologyVial } from './vials'
+import { OncologyVial } from '../vials'
 
 type VialCount = { size: number; coefficient: number }
 
@@ -20,6 +20,7 @@ function* subsets(sizes: Array<VialCount>): Generator<VialCount[], void, void> {
 }
 
 export type OncologyWasteConfig = {
+  vial: OncologyVial
   config: VialCount[]
   total: number
   waste: number
@@ -69,12 +70,12 @@ export function oncologyWaste(
     if (total < used) continue
 
     if (!best) {
-      best = { total, waste, config: current }
+      best = { total, waste, config: current, vial }
 
       continue
     }
 
-    if (total < best.total) best = { total, config: current, waste }
+    if (total < best.total) best = { total, config: current, waste, vial }
   }
 
   return best

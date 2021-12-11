@@ -9,7 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { initialOncologyVials, OncologyVial, RadiologyVial, Vial, VialTypes } from './vials'
+import { initialOncologyVials, OncologyVial, RadiologyVial, Vial, VialTypes } from '../vials'
 
 type SetStateResult<S> = [S, Dispatch<SetStateAction<S>>]
 

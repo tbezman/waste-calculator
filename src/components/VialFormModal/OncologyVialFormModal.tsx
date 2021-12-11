@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { useCallback, useMemo, useState } from 'react'
-import { Modal } from './Modal'
-import { OncologyVial } from './vials'
-import { Input, InputLabel } from './Input'
+import { Modal } from '../Modal'
+import { OncologyVial } from '../../vials'
+import { Input, InputLabel } from '../Input'
 
 export const OncologyVialFormModal = ({
   onClose,
@@ -28,7 +28,7 @@ export const OncologyVialFormModal = ({
 
   const handleSave = useCallback(() => {
     if (name && unit && nonZeroVials.length) {
-      onClose({ type: 'radiology', drug: name, unit, vialSizes: sizes.filter(Boolean) })
+      onClose({ type: 'oncology', drug: name, unit, vialSizes: sizes.filter(Boolean) })
     }
   }, [name, nonZeroVials.length, onClose, sizes, unit])
 

@@ -39,11 +39,7 @@ export function oncologyWaste(
   const used = parseFloat(usedString || '0')
 
   if (wastedAmount === 0 && used === 0) {
-    return {
-      config: [{ coefficient: 1, size: smallestVialSize }],
-      total: smallestVialSize,
-      waste: smallestVialSize,
-    }
+    return undefined
   }
 
   let best: OncologyWasteConfig | undefined
